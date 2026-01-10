@@ -5,7 +5,66 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
+	"runtime"
 )
+
+// Table Test
+func TestTableHelloWorld(t *testing.T) {
+	tests := []struct {
+		name     string
+		request string
+		expected string
+	}{
+		{
+			name:     "Hilmi",
+			request:  "Hilmi",
+			expected: "Hello Hilmi",
+		},
+		{
+			name:     "Yahya",
+			request:  "Yahya",
+			expected: "Hello Yahya",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			result := HelloWorld(test.request)
+			require.Equal(t, test.expected, result, "Result must be 'Hello Hilmi'")
+		})
+	}
+}
+
+// Sub Test
+func TestSubTest(t *testing.T) {
+	t.Run("Hilmi", func(t *testing.T) {
+		result := HelloWorld("Hilmi")
+		require.Equal(t, "Hello Hilmi", result, "Result must be 'Hello Hilmi'")
+	})
+
+	t.Run("Yahya", func(t *testing.T) {
+		result := HelloWorld("Yahya")
+		require.Equal(t, "Hello Yahya", result, "Result must be 'Hello Yahya'")
+	})
+}
+
+// Main Test / Before & After Test
+func TestMain(m *testing.M) {
+	fmt.Println("Sebelum Unit Test")
+	m.Run() // menjalankan semua unit test
+	fmt.Println("Setelah Unit Test")
+}
+
+func TestSkip(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("Cannot run on Windows OS")
+	}
+
+	result := HelloWorld("Skip")
+	if result != "Hello Skip" {
+		t.Error("Result must be 'Hello Skip'")
+	}
+}
 
 func TestHelloWorldRequire(t *testing.T) {
 	result := HelloWorld("Require")
